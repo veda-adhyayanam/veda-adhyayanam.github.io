@@ -5,299 +5,427 @@
 	<title>Veda Suktams PDFs</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600&family=Crimson+Pro:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 	<style>
-		table,
-		th,
-		td {
-			border: 1px solid black;
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background: #f5f3ef;
+			min-height: 100vh;
+			padding: 2.5rem 1.5rem;
+			color: #2c2c2a;
+		}
+
+		.page-wrapper {
+			max-width: 780px;
+			margin: 0 auto;
+		}
+
+		.page-header {
+			text-align: center;
+			margin-bottom: 2.5rem;
+		}
+
+		.page-header h1 {
+			font-family: 'Crimson Pro', serif;
+			font-size: 2.2rem;
+			font-weight: 600;
+			color: #3C3489;
+			letter-spacing: 0.01em;
+			margin-bottom: 0.4rem;
+		}
+
+		.page-header .subtitle {
+			font-size: 0.9rem;
+			color: #888780;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+		}
+
+		.divider {
+			width: 60px;
+			height: 3px;
+			background: linear-gradient(90deg, #7F77DD, #5DCAA5);
+			border-radius: 2px;
+			margin: 0.75rem auto 0;
+		}
+
+		figure { margin: 0; }
+
+		table {
+			width: 100%;
 			border-collapse: collapse;
+			background: #ffffff;
+			border-radius: 14px;
+			overflow: hidden;
+			box-shadow: 0 2px 16px rgba(83,74,183,0.07), 0 1px 4px rgba(0,0,0,0.04);
+			border: none;
+		}
+
+		table table {
+			box-shadow: none;
+			border-radius: 0;
+			background: transparent;
+		}
+
+		th {
+			background: #534AB7;
+			color: #EEEDFE;
+			font-size: 0.78rem;
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			padding: 0.85rem 1.25rem;
+			border: none;
+			text-align: left;
+		}
+
+		th:last-child {
+			text-align: center;
+			width: 80px;
+		}
+
+		td {
+			padding: 0.7rem 1.25rem;
+			border: none;
+			border-bottom: 1px solid #EEEDFE;
+			font-size: 0.93rem;
+			color: #3C3489;
+			font-weight: 400;
+			vertical-align: middle;
+		}
+
+		tr:last-child td {
+			border-bottom: none;
+		}
+
+		tbody tr {
+			transition: background 0.15s;
+		}
+
+		tbody tr:hover {
+			background: #EEEDFE55;
+		}
+
+		tbody tr:nth-child(even) {
+			background: #faf9ff;
+		}
+
+		tbody tr:nth-child(even):hover {
+			background: #EEEDFE55;
+		}
+
+		td:last-child {
+			text-align: center;
+		}
+
+		td a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			border-radius: 8px;
+			background: #FCEBEB;
+			transition: background 0.15s, transform 0.1s;
+		}
+
+		td a:hover {
+			background: #F7C1C1;
+			transform: scale(1.08);
+		}
+
+		td a .fa-file-pdf-o {
+			font-size: 18px !important;
+			color: #A32D2D !important;
+		}
+
+		/* nested table (for Sanskrit pronunciation row) */
+		td > table td {
+			padding: 0.15rem 0;
+			border: none;
+			font-size: 0.92rem;
+			color: #3C3489;
+			background: transparent;
+		}
+
+		td > table tr:last-child td {
+			color: #534AB7;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 2rem;
+			font-size: 0.78rem;
+			color: #B4B2A9;
+			letter-spacing: 0.04em;
 		}
 	</style>
 </head>
 
 <body>
-	<h1>Veda Suktams PDFs</h1>
-	<figure>
-		<table>
-			<tr>
-				<th>Suktam</th>
-				<th>PDF</th>
-			</tr>
-			<tr>
-				<td>Ganapati_Adhrvasheersham_Telugu</td>
-				<td>
-					<a href="PDFs/Ganapati_Adhrvasheersham_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>ArunaPrashnah_Telugu</td>
-				<td>
-					<a href="PDFs/ArunaPrashnah_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>DurgaSooktam_Devanagari</td>
-				<td>
-					<a href="PDFs/DurgaSooktam_Devanagari.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>DurgaSooktam_Telugu</td>
-				<td>
-					<a href="PDFs/DurgaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>Mantrapushpam_Telugu</td>
-				<td>
-					<a href="PDFs/Mantrapushpam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>Mantrapushpam_Telugu_V1</td>
-				<td>
-					<a href="PDFs/Mantrapushpam_v1.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>NavagrahaSooktam_Telugu.pdf</td>
-				<td>
-					<a href="PDFs/NavagrahaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>NarayanaSooktam_Telugu.pdf</td>
-				<td>
-					<a href="PDFs/NarayanaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
+	<div class="page-wrapper">
+		<div class="page-header">
+			<h1>Veda Suktams PDFs</h1>
+			<div class="divider"></div>
+			<p class="subtitle">Sacred Texts &amp; Hymns Collection</p>
+		</div>
 
-			<tr>
-				<td>Pavamana_Suktam_Telugu.pdf</td>
-				<td>
-					<a href="PDFs/Pavamana_Suktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>PurushaSooktam_Telugu.pdf</td>
-				<td>
-					<a href="PDFs/PurushaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>SandhyaaVandanamu_తెలుగు.pdf</td>
-				<td>
-					<a href="PDFs/SandhyaaVandanamu_తెలుగు.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>SreeSooktam_Telugu</td>
-				<td>
-					<a href="PDFs/SreeSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>గణపతి ప్రార్థన</td>
-				<td>
-					<a href="PDFs/గణపతి ప్రార్థన.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>సన్న్యాస సూక్తమ్</td>
-				<td>
-					<a href="PDFs/సన్న్యాస సూక్తమ్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>రుద్రం_Telugu</td>
-				<td>
-					<a href="PDFs/రుద్రం_Telugu.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>మేధాసూక్తం_Telugu</td>
-				<td>
-					<a href="PDFs/మేధాసూక్తం_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>లఘున్యాసః</td>
-				<td>
-					<a href="PDFs/లఘున్యాసః.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>దేవీసూక్తమ్</td>
-				<td>
-					<a href="PDFs/దేవీసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>బ్రహ్మయజ్ఞం-స్వాధ్యాయము</td>
-				<td>
-					<a href="PDFs/బ్రహ్మయజ్ఞం-స్వాధ్యాయము.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>మహాన్యాస మన్త్రపాఠమ్</td>
-				<td>
-					<a href="PDFs/మహాన్యాస మన్త్రపాఠమ్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>శ్రీరుద్రాభిషేక_విధి</td>
-				<td>
-					<a href="PDFs/శ్రీరుద్రాభిషేక_విధి.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>అగ్నిసూక్తమ్ Agni Sooktam</td>
-				<td>
-					<a href="PDFs/అగ్నిసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>మన్యుసూక్తమ్ Manyu Sooktam</td>
-				<td>
-					<a href="PDFs/మన్యుసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>సర్పసూక్తమ్ Sarpasooktam</td>
-				<td>
-					<a href="PDFs/సర్ప సూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td>తైత్తిరీయోపనిషత్ Taittireeyopanishat</td>
-				<td>
-					<a href="PDFs/తైత్తిరీయోపనిషత్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>దూర్వా సూక్తమ్ Doorvasooktam</td>
-				<td>
-					<a href="PDFs/దూర్వా సూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>భూ సూక్తమ్ Bhoosooktam</td>
-				<td>
-					<a href="PDFs/భూసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>మహానారాయణోపనిషత్ Mahaanaaraayanopanishat</td>
-				<td>
-					<a href="PDFs/మహానారాయణోపనిషత్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>ఆయుష్యసూక్తమ్ Aayushya Sooktam</td>
-				<td>
-					<a href="PDFs/ఆయుష్యసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>నక్షత్రసూక్తమ్ NakshatraSuktam</td>
-				<td>
-					<a href="PDFs/NakshatraSuktam_Telugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>నీళాసూక్తమ్ Neela Sooktam</td>
-				<td>
-					<a href="PDFs/నీళాసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>విష్ణుసూక్తమ్ Vishnu Sooktam</td>
-				<td>
-					<a href="PDFs/విష్ణుసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
-					</a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>గోసూక్తమ్ Gosooktam</td>
-				<td>
-					<a href="PDFs/గోసూక్తమ్.pdf"><i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			</tr>
-			<tr>
-				<td>రాత్రిసూక్తమ్ Raatrisooktam</td>
-				<td>
-					<a href="PDFs/రాత్రిసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>అన్నసూక్తమ్ Annasooktam</td>
-				<td>
-					<a href="PDFs/అన్నసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>త్రిసుపర్ణం Trisuparnam</td>
-				<td>
-					<a href="PDFs/త్రిసుపర్ణం.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>ఉదకశాన్తి UdakaShanti</td>
-				<td>
-					<a href="PDFs/UdakaShantiTelugu.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-			<tr>
-				<td>Srungeri and Kanchi Birudaavali</td>
-				<td>
-					<a href="PDFs/SrungeriandKanchiBirudaavali.pdf"><i class="fa fa-file-pdf-o"
-							style="font-size:24px;color:red"></i> </a>
-				</td>
-			</tr>
-		</table>
-	</figure>
+		<figure>
+			<table>
+				<thead>
+					<tr>
+						<th>Suktam</th>
+						<th>PDF</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Ganapati_Adhrvasheersham_Telugu</td>
+						<td>
+							<a href="PDFs/Ganapati_Adhrvasheersham_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>ArunaPrashnah_Telugu</td>
+						<td>
+							<a href="PDFs/ArunaPrashnah_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>DurgaSooktam_Devanagari</td>
+						<td>
+							<a href="PDFs/DurgaSooktam_Devanagari.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>DurgaSooktam_Telugu</td>
+						<td>
+							<a href="PDFs/DurgaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>Mantrapushpam_Telugu</td>
+						<td>
+							<a href="PDFs/Mantrapushpam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>Mantrapushpam_Telugu_V1</td>
+						<td>
+							<a href="PDFs/Mantrapushpam_v1.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>NavagrahaSooktam_Telugu.pdf</td>
+						<td>
+							<a href="PDFs/NavagrahaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>NarayanaSooktam_Telugu.pdf</td>
+						<td>
+							<a href="PDFs/NarayanaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>Pavamana_Suktam_Telugu.pdf</td>
+						<td>
+							<a href="PDFs/Pavamana_Suktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>PurushaSooktam_Telugu.pdf</td>
+						<td>
+							<a href="PDFs/PurushaSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>SandhyaaVandanamu_తెలుగు.pdf</td>
+						<td>
+							<a href="PDFs/SandhyaaVandanamu_తెలుగు.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>SreeSooktam_Telugu</td>
+						<td>
+							<a href="PDFs/SreeSooktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>గణపతి ప్రార్థన</td>
+						<td>
+							<a href="PDFs/గణపతి ప్రార్థన.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>సన్న్యాస సూక్తమ్</td>
+						<td>
+							<a href="PDFs/సన్న్యాస సూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>రుద్రం_Telugu</td>
+						<td>
+							<a href="PDFs/రుద్రం_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>మేధాసూక్తం_Telugu</td>
+						<td>
+							<a href="PDFs/మేధాసూక్తం_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>లఘున్యాసః</td>
+						<td>
+							<a href="PDFs/లఘున్యాసః.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>దేవీసూక్తమ్</td>
+						<td>
+							<a href="PDFs/దేవీసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>బ్రహ్మయజ్ఞం-స్వాధ్యాయము</td>
+						<td>
+							<a href="PDFs/బ్రహ్మయజ్ఞం-స్వాధ్యాయము.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>మహాన్యాస మన్త్రపాఠమ్</td>
+						<td>
+							<a href="PDFs/మహాన్యాస మన్త్రపాఠమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>శ్రీరుద్రాభిషేక_విధి</td>
+						<td>
+							<a href="PDFs/శ్రీరుద్రాభిషేక_విధి.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>అగ్నిసూక్తమ్ Agni Sooktam</td>
+						<td>
+							<a href="PDFs/అగ్నిసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>మన్యుసూక్తమ్ Manyu Sooktam</td>
+						<td>
+							<a href="PDFs/మన్యుసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>సర్పసూక్తమ్ Sarpasooktam</td>
+						<td>
+							<a href="PDFs/సర్ప సూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>తైత్తిరీయోపనిషత్ Taittireeyopanishat</td>
+						<td>
+							<a href="PDFs/తైత్తిరీయోపనిషత్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>దూర్వా సూక్తమ్ Doorvasooktam</td>
+						<td>
+							<a href="PDFs/దూర్వా సూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>భూ సూక్తమ్ Bhoosooktam</td>
+						<td>
+							<a href="PDFs/భూసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>మహానారాయణోపనిషత్ Mahaanaaraayanopanishat</td>
+						<td>
+							<a href="PDFs/మహానారాయణోపనిషత్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>ఆయుష్యసూక్తమ్ Aayushya Sooktam</td>
+						<td>
+							<a href="PDFs/ఆయుష్యసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>నక్షత్రసూక్తమ్ NakshatraSuktam</td>
+						<td>
+							<a href="PDFs/NakshatraSuktam_Telugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>నీళాసూక్తమ్ Neela Sooktam</td>
+						<td>
+							<a href="PDFs/నీళాసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>విష్ణుసూక్తమ్ Vishnu Sooktam</td>
+						<td>
+							<a href="PDFs/విష్ణుసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>గోసూక్తమ్ Gosooktam</td>
+						<td>
+							<a href="PDFs/గోసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>రాత్రిసూక్తమ్ Raatrisooktam</td>
+						<td>
+							<a href="PDFs/రాత్రిసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>అన్నసూక్తమ్ Annasooktam</td>
+						<td>
+							<a href="PDFs/అన్నసూక్తమ్.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>త్రిసుపర్ణం Trisuparnam</td>
+						<td>
+							<a href="PDFs/త్రిసుపర్ణం.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>ఉదకశాన్తి UdakaShanti</td>
+						<td>
+							<a href="PDFs/UdakaShantiTelugu.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>Srungeri and Kanchi Birudaavali</td>
+						<td>
+							<a href="PDFs/SrungeriandKanchiBirudaavali.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr><td>Telugu Guide Sanskrit Pronunciation</td></tr>
+								<tr><td>సంస్కృత ఉచ్చారణ నియమాలు</td></tr>
+							</table>
+						</td>
+						<td>
+							<a href="PDFs/TELUGU_Guide_Sanskrit_Pronunciation.pdf"><i class="fa fa-file-pdf-o"></i></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+
+		<p class="footer">All PDFs are in Telugu script unless otherwise noted</p>
+	</div>
 </body>
 
 </html>
