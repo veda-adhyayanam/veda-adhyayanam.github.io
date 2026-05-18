@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telugu Sarojamu - గో విం దం భ జ మూ ఢ మ తే</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .difficulty {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-difficulty {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+
+        .btn-difficulty.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .timer {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .sarojamu-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 0;
+            border: 3px solid #2d3748;
+            margin-bottom: 20px;
+            background: #2d3748;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            background: white;
+            border: 1px solid #cbd5e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cell:hover:not(.fixed):not(.error) {
+            background: #edf2f7;
+        }
+
+        .cell.selected {
+            background: #bee3f8;
+            border: 2px solid #3182ce;
+        }
+
+        .cell.fixed {
+            background: #f7fafc;
+            color: #2d3748;
+            cursor: default;
+        }
+
+        .cell.error {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .cell.highlight {
+            background: #fef5e7;
+        }
+
+        /* Thick borders for 3x3 boxes */
+        .cell:nth-child(3n) {
+            border-right: 3px solid #2d3748;
+        }
+
+        .cell:nth-child(n+19):nth-child(-n+27),
+        .cell:nth-child(n+46):nth-child(-n+54) {
+            border-bottom: 3px solid #2d3748;
+        }
+
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .number-btn {
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .number-btn:hover {
+            background: #e2e8f0;
+            transform: scale(1.05);
+        }
+
+        .number-btn:active {
+            transform: scale(0.95);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .message.success {
+            background: #c6f6d5;
+            color: #22543d;
+            display: block;
+        }
+
+        .message.error {
+            background: #fed7d7;
+            color: #742a2a;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .cell {
+                font-size: 18px;
+            }
+
+            .number-btn {
+                padding: 10px;
+                font-size: 20px;
+            }
+
+            button {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Telugu Sarojamu</h1>
+        <div class="subtitle">గో విం దం భ జ మూ ఢ మ తే</div>
+
+        <div class="controls">
+            <div class="difficulty">
+                <button class="btn-difficulty active" data-level="easy">Easy</button>
+                <button class="btn-difficulty" data-level="medium">Medium</button>
+                <button class="btn-difficulty" data-level="hard">Hard</button>
+            </div>
+            <button class="btn-primary" id="newGame">New Game</button>
+        </div>
+
+        <div class="info">
+            <div class="timer">Time: <span id="timer">00:00</span></div>
+            <div class="mistakes">Mistakes: <span id="mistakes">0</span>/3</div>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="sarojamu-grid" id="grid"></div>
+
+        <div class="number-pad" id="numberPad"></div>
+
+        <div class="actions">
+            <button class="btn-secondary" id="hint">Hint</button>
+            <button class="btn-danger" id="clear">Clear Cell</button>
+            <button class="btn-primary" id="check">Check Solution</button>
+            <button class="btn-primary" id="showSolution">Show Solution</button>
+        </div>
+    </div>
+
+    <script>
+        // Telugu characters mapping
+        const TELUGU_CHARS = ['గో', 'విం', 'దం', 'భ', 'జ', 'మూ', 'ఢ', 'మ', 'తే'];
+        const CHAR_TO_NUM = {};
+        const NUM_TO_CHAR = {};
+
+        TELUGU_CHARS.forEach((char, index) => {
+            CHAR_TO_NUM[char] = index + 1;
+            NUM_TO_CHAR[index + 1] = char;
+        });
+
+        // Game state
+        let currentDifficulty = 'easy';
+        let selectedCell = null;
+        let puzzle = [];
+        let solution = [];
+        let userGrid = [];
+        let mistakes = 0;
+        let timerInterval = null;
+        let seconds = 0;
+
+        // Initialize game
+        function init() {
+            createNumberPad();
+            setupEventListeners();
+            startNewGame();
+        }
+
+        function createNumberPad() {
+            const pad = document.getElementById('numberPad');
+            TELUGU_CHARS.forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = 'number-btn';
+                btn.textContent = char;
+                btn.onclick = () => placeNumber(char);
+                pad.appendChild(btn);
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('newGame').onclick = startNewGame;
+            document.getElementById('hint').onclick = giveHint;
+            document.getElementById('clear').onclick = clearCell;
+            document.getElementById('check').onclick = checkSolution;
+            document.getElementById('showSolution').onclick = showSolution;
+
+            document.querySelectorAll('.btn-difficulty').forEach(btn => {
+                btn.onclick = function () {
+                    document.querySelectorAll('.btn-difficulty').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDifficulty = this.dataset.level;
+                    startNewGame();
+                };
+            });
+
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        function handleKeyPress(e) {
+            if (!selectedCell) return;
+
+            const key = e.key;
+            if (key >= '1' && key <= '9') {
+                const num = parseInt(key);
+                placeNumber(NUM_TO_CHAR[num]);
+            } else if (key === 'Backspace' || key === 'Delete') {
+                clearCell();
+            }
+        }
+
+        function startNewGame() {
+            mistakes = 0;
+            seconds = 0;
+            document.getElementById('mistakes').textContent = '0';
+            document.getElementById('message').style.display = 'none';
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+
+            generatePuzzle();
+            renderGrid();
+        }
+
+        function updateTimer() {
+            seconds++;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('timer').textContent =
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function generatePuzzle() {
+            // Generate a complete valid Sarojamu solution
+            solution = Array(9).fill(null).map(() => Array(9).fill(0));
+            fillGrid(solution);
+
+            // Create puzzle by removing numbers based on difficulty
+            puzzle = solution.map(row => [...row]);
+            userGrid = solution.map(row => [...row]);
+
+            const cellsToRemove = {
+                'easy': 35,
+                'medium': 45,
+                'hard': 55
+            }[currentDifficulty];
+
+            let removed = 0;
+            while (removed < cellsToRemove) {
+                const row = Math.floor(Math.random() * 9);
+                const col = Math.floor(Math.random() * 9);
+                if (puzzle[row][col] !== 0) {
+                    puzzle[row][col] = 0;
+                    userGrid[row][col] = 0;
+                    removed++;
+                }
+            }
+        }
+
+        function fillGrid(grid) {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (grid[row][col] === 0) {
+                        shuffleArray(numbers);
+                        for (let num of numbers) {
+                            if (isValidPlacement(grid, row, col, num)) {
+                                grid[row][col] = num;
+                                if (fillGrid(grid)) {
+                                    return true;
+                                }
+                                grid[row][col] = 0;
+                            }
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function isValidPlacement(grid, row, col, num) {
+            // Check row (skip the current cell)
+            for (let x = 0; x < 9; x++) {
+                if (x !== col && grid[row][x] === num) return false;
+            }
+
+            // Check column (skip the current cell)
+            for (let x = 0; x < 9; x++) {
+                if (x !== row && grid[x][col] === num) return false;
+            }
+
+            // Check 3x3 box (skip the current cell)
+            const boxRow = Math.floor(row / 3) * 3;
+            const boxCol = Math.floor(col / 3) * 3;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const currentRow = boxRow + i;
+                    const currentCol = boxCol + j;
+                    if ((currentRow !== row || currentCol !== col) &&
+                        grid[currentRow][currentCol] === num) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+
+                    const value = userGrid[row][col];
+                    if (value !== 0) {
+                        cell.textContent = NUM_TO_CHAR[value];
+                        if (puzzle[row][col] !== 0) {
+                            cell.classList.add('fixed');
+                        }
+                    }
+
+                    cell.onclick = () => selectCell(row, col);
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function selectCell(row, col) {
+            // Don't select fixed cells
+            if (puzzle[row][col] !== 0) return;
+
+            selectedCell = { row, col };
+
+            // Update visual selection
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('selected', 'highlight');
+            });
+
+            const cells = document.querySelectorAll('.cell');
+            const index = row * 9 + col;
+            cells[index].classList.add('selected');
+
+            // Highlight same numbers
+            const currentValue = userGrid[row][col];
+            if (currentValue !== 0) {
+                cells.forEach(cell => {
+                    const r = parseInt(cell.dataset.row);
+                    const c = parseInt(cell.dataset.col);
+                    if (userGrid[r][c] === currentValue) {
+                        cell.classList.add('highlight');
+                    }
+                });
+            }
+        }
+
+        function placeNumber(char) {
+            if (!selectedCell) {
+                showMessage('Please select a cell first', 'error');
+                return;
+            }
+
+            const { row, col } = selectedCell;
+            if (puzzle[row][col] !== 0) return;
+
+            const num = CHAR_TO_NUM[char];
+            userGrid[row][col] = num;
+
+            // Check if placement is valid
+            const cells = document.querySelectorAll('.cell');
+            const index = row * 9 + col;
+            cells[index].classList.remove('error');
+
+            if (!isValidPlacement(userGrid, row, col, num)) {
+                cells[index].classList.add('error');
+                mistakes++;
+                document.getElementById('mistakes').textContent = mistakes;
+
+                if (mistakes >= 3) {
+                    gameOver(false);
+                    return;
+                }
+            }
+
+            renderGrid();
+
+            // Check if puzzle is complete
+            if (isPuzzleComplete()) {
+                gameOver(true);
+            }
+        }
+
+        function clearCell() {
+            if (!selectedCell) return;
+
+            const { row, col } = selectedCell;
+            if (puzzle[row][col] !== 0) return;
+
+            userGrid[row][col] = 0;
+            renderGrid();
+            selectCell(row, col);
+        }
+
+        function giveHint() {
+            // Find an empty cell and fill it with the correct answer
+            const emptyCells = [];
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (puzzle[row][col] === 0 && userGrid[row][col] === 0) {
+                        emptyCells.push({ row, col });
+                    }
+                }
+            }
+
+            if (emptyCells.length === 0) {
+                showMessage('No empty cells to hint!', 'error');
+                return;
+            }
+
+            const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            userGrid[randomCell.row][randomCell.col] = solution[randomCell.row][randomCell.col];
+            puzzle[randomCell.row][randomCell.col] = solution[randomCell.row][randomCell.col];
+
+            renderGrid();
+            showMessage('Hint given!', 'success');
+
+            if (isPuzzleComplete()) {
+                gameOver(true);
+            }
+        }
+
+        function checkSolution() {
+            let isCorrect = true;
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (userGrid[row][col] !== solution[row][col]) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+                if (!isCorrect) break;
+            }
+
+            if (isCorrect) {
+                gameOver(true);
+            } else {
+                showMessage('Not quite right! Keep trying.', 'error');
+            }
+        }
+
+        function showSolution() {
+            if (confirm('Are you sure you want to see the solution? This will end the current game.')) {
+                clearInterval(timerInterval);
+                userGrid = solution.map(row => [...row]);
+                puzzle = solution.map(row => [...row]);
+                renderGrid();
+                showMessage('Solution revealed! Start a new game to play again.', 'success');
+            }
+        }
+
+        function isPuzzleComplete() {
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (userGrid[row][col] === 0) return false;
+                }
+            }
+            return true;
+        }
+
+        function gameOver(won) {
+            clearInterval(timerInterval);
+
+            if (won) {
+                showMessage(`🎉 Congratulations! You solved it in ${document.getElementById('timer').textContent}!`, 'success');
+            } else {
+                showMessage('😔 Game Over! Too many mistakes. Try again!', 'error');
+            }
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = `message ${type}`;
+            msg.style.display = 'block';
+
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+
+        // Start the game when page loads
+        init();
+    </script>
+</body>
+
+</html>
