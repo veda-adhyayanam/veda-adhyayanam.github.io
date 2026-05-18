@@ -56,6 +56,26 @@
             gap: 10px;
         }
 
+        .settings {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            cursor: pointer;
+        }
+
         .difficulty {
             display: flex;
             gap: 10px;
@@ -199,13 +219,20 @@
             transition: all 0.2s;
         }
 
-        .number-btn:hover {
+        .number-btn:hover:not(.disabled) {
             background: #e2e8f0;
             transform: scale(1.05);
         }
 
-        .number-btn:active {
+        .number-btn:active:not(.disabled) {
             transform: scale(0.95);
+        }
+
+        .number-btn.disabled {
+            background: #cbd5e0;
+            color: #a0aec0;
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .actions {
@@ -233,6 +260,71 @@
             background: #fed7d7;
             color: #742a2a;
             display: block;
+        }
+
+        /* Celebration Animation Styles */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 20px;
+            height: 100px;
+            animation: ribbon-fall 4s ease-in forwards;
+        }
+
+        @keyframes ribbon-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: firework-burst 1s ease-out forwards;
+        }
+
+        @keyframes firework-burst {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
         }
 
         @media (max-width: 600px) {
@@ -269,6 +361,13 @@
     <div class="container">
         <h1>Telugu Sarojamu</h1>
         <div class="subtitle">గో విం దం భ జ మూ ఢ మ తే</div>
+
+        <div class="settings">
+            <label class="checkbox-label">
+                <input type="checkbox" id="greyOutUsed" checked>
+                <span>Grey out completed characters</span>
+            </label>
+        </div>
 
         <div class="controls">
             <div class="difficulty">
@@ -318,6 +417,7 @@
         let mistakes = 0;
         let timerInterval = null;
         let seconds = 0;
+        let greyOutUsedChars = true;
 
         // Initialize game
         function init() {
@@ -332,6 +432,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'number-btn';
                 btn.textContent = char;
+                btn.dataset.char = char;
                 btn.onclick = () => placeNumber(char);
                 pad.appendChild(btn);
             });
@@ -352,6 +453,11 @@
                     startNewGame();
                 };
             });
+
+            document.getElementById('greyOutUsed').onchange = function () {
+                greyOutUsedChars = this.checked;
+                updateNumberPadState();
+            };
 
             document.addEventListener('keydown', handleKeyPress);
         }
@@ -379,6 +485,7 @@
 
             generatePuzzle();
             renderGrid();
+            updateNumberPadState();
         }
 
         function updateTimer() {
@@ -556,6 +663,7 @@
             }
 
             renderGrid();
+            updateNumberPadState();
 
             // Check if puzzle is complete
             if (isPuzzleComplete()) {
@@ -571,6 +679,7 @@
 
             userGrid[row][col] = 0;
             renderGrid();
+            updateNumberPadState();
             selectCell(row, col);
         }
 
@@ -595,6 +704,7 @@
             puzzle[randomCell.row][randomCell.col] = solution[randomCell.row][randomCell.col];
 
             renderGrid();
+            updateNumberPadState();
             showMessage('Hint given!', 'success');
 
             if (isPuzzleComplete()) {
@@ -640,10 +750,116 @@
             return true;
         }
 
+        function updateNumberPadState() {
+            if (!greyOutUsedChars) {
+                // Remove disabled state from all buttons
+                document.querySelectorAll('.number-btn').forEach(btn => {
+                    btn.classList.remove('disabled');
+                });
+                return;
+            }
+
+            // Count how many times each character is used
+            const charCount = {};
+            TELUGU_CHARS.forEach(char => {
+                charCount[char] = 0;
+            });
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const value = userGrid[row][col];
+                    if (value !== 0) {
+                        const char = NUM_TO_CHAR[value];
+                        charCount[char]++;
+                    }
+                }
+            }
+
+            // Update button states - each character should appear exactly 9 times
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                const char = btn.dataset.char;
+                if (charCount[char] >= 9) {
+                    btn.classList.add('disabled');
+                } else {
+                    btn.classList.remove('disabled');
+                }
+            });
+        }
+
+        function createCelebration() {
+            const overlay = document.createElement('div');
+            overlay.className = 'celebration-overlay';
+            document.body.appendChild(overlay);
+
+            // Create confetti
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff1493'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    overlay.appendChild(confetti);
+                }, i * 30);
+            }
+
+            // Create ribbons
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const ribbon = document.createElement('div');
+                    ribbon.className = 'ribbon';
+                    ribbon.style.left = Math.random() * 100 + '%';
+                    ribbon.style.top = '-100px';
+                    ribbon.style.background = `linear-gradient(${Math.random() * 360}deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
+                    ribbon.style.animationDelay = Math.random() * 0.5 + 's';
+                    overlay.appendChild(ribbon);
+                }, i * 50);
+            }
+
+            // Create fireworks
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createFirework(overlay, Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.5);
+                }, i * 400);
+            }
+
+            // Remove overlay after animation
+            setTimeout(() => {
+                overlay.remove();
+            }, 5000);
+        }
+
+        function createFirework(container, x, y) {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            const particles = 30;
+
+            for (let i = 0; i < particles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                const angle = (Math.PI * 2 * i) / particles;
+                const velocity = 50 + Math.random() * 50;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+
+                container.appendChild(particle);
+            }
+        }
+
         function gameOver(won) {
             clearInterval(timerInterval);
 
             if (won) {
+                createCelebration();
                 showMessage(`🎉 Congratulations! You solved it in ${document.getElementById('timer').textContent}!`, 'success');
             } else {
                 showMessage('😔 Game Over! Too many mistakes. Try again!', 'error');
