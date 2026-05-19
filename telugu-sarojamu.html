@@ -59,8 +59,9 @@
         .settings {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         .checkbox-label {
@@ -74,6 +75,119 @@
 
         .checkbox-label input[type="checkbox"] {
             cursor: pointer;
+        }
+
+        .progress-container {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-mode .container {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode h1 {
+            color: #667eea;
+        }
+
+        body.dark-mode .subtitle {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .checkbox-label,
+        body.dark-mode .progress-label,
+        body.dark-mode .timer,
+        body.dark-mode .mistakes {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .cell {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #2a2a3e;
+        }
+
+        body.dark-mode .cell:hover:not(.fixed):not(.error) {
+            background: #2a2a3e;
+        }
+
+        body.dark-mode .cell.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        body.dark-mode .cell.fixed {
+            background: #16213e;
+            color: #667eea;
+        }
+
+        body.dark-mode .cell.error {
+            background: #ff6b6b;
+        }
+
+        body.dark-mode .cell.highlight {
+            background: #764ba2;
+        }
+
+        body.dark-mode .number-btn {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #2a2a3e;
+        }
+
+        body.dark-mode .number-btn:hover:not(.disabled) {
+            background: #2a2a3e;
+        }
+
+        body.dark-mode .number-btn.disabled {
+            background: #0a0a1e;
+            color: #4a4a5e;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .cell.completed {
+            background: linear-gradient(135deg, #2a4858 0%, #4a3a58 100%);
+        }
+
+        body.dark-mode .cell.completed.fixed {
+            background: linear-gradient(135deg, #2a4858 0%, #4a3a58 100%);
         }
 
         .difficulty {
@@ -189,6 +303,32 @@
 
         .cell.highlight {
             background: #fef5e7;
+        }
+
+        .cell.completed {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            animation: completePulse 0.6s ease-out;
+        }
+
+        .cell.completed.fixed {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        @keyframes completePulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+            }
         }
 
         /* Thick borders for 3x3 boxes */
@@ -367,6 +507,17 @@
                 <input type="checkbox" id="greyOutUsed" checked>
                 <span>Grey out completed characters</span>
             </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="darkMode">
+                <span>Dark mode</span>
+            </label>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label">Progress: <span id="progressText">0%</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+            </div>
         </div>
 
         <div class="controls">
@@ -459,7 +610,45 @@
                 updateNumberPadState();
             };
 
+            document.getElementById('darkMode').onchange = function () {
+                document.body.classList.toggle('dark-mode', this.checked);
+            };
+
             document.addEventListener('keydown', handleKeyPress);
+        }
+
+        function updateProgress() {
+            let filledCells = 0;
+            let totalEmptyCells = 0;
+
+            // Count total empty cells in the puzzle
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (puzzle[row][col] === 0) {
+                        totalEmptyCells++;
+                        if (userGrid[row][col] !== 0) {
+                            filledCells++;
+                        }
+                    }
+                }
+            }
+
+            const progress = totalEmptyCells > 0 ? Math.round((filledCells / totalEmptyCells) * 100) : 0;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            console.log('updateProgress called');
+            console.log('progressFill element:', progressFill);
+            console.log('progressText element:', progressText);
+            console.log('Progress:', progress, '% - Filled:', filledCells, '/', totalEmptyCells);
+
+            if (progressFill && progressText) {
+                progressFill.style.width = progress + '%';
+                progressFill.textContent = progress + '%';
+                progressText.textContent = progress + '%';
+            } else {
+                alert('ERROR: Progress bar elements not found! Check HTML structure.');
+            }
         }
 
         function handleKeyPress(e) {
@@ -486,6 +675,7 @@
             generatePuzzle();
             renderGrid();
             updateNumberPadState();
+            updateProgress();
         }
 
         function updateTimer() {
@@ -604,6 +794,11 @@
                     grid.appendChild(cell);
                 }
             }
+
+            // Highlight completed sections after rendering - use requestAnimationFrame for better timing
+            requestAnimationFrame(() => {
+                highlightCompletedSections();
+            });
         }
 
         function selectCell(row, col) {
@@ -664,6 +859,7 @@
 
             renderGrid();
             updateNumberPadState();
+            updateProgress();
 
             // Check if puzzle is complete
             if (isPuzzleComplete()) {
@@ -680,6 +876,7 @@
             userGrid[row][col] = 0;
             renderGrid();
             updateNumberPadState();
+            updateProgress();
             selectCell(row, col);
         }
 
@@ -705,6 +902,7 @@
 
             renderGrid();
             updateNumberPadState();
+            updateProgress();
             showMessage('Hint given!', 'success');
 
             if (isPuzzleComplete()) {
@@ -737,6 +935,7 @@
                 userGrid = solution.map(row => [...row]);
                 puzzle = solution.map(row => [...row]);
                 renderGrid();
+                updateProgress();
                 showMessage('Solution revealed! Start a new game to play again.', 'success');
             }
         }
@@ -750,12 +949,105 @@
             return true;
         }
 
+        function highlightCompletedSections() {
+            console.log('highlightCompletedSections called');
+            const cells = document.querySelectorAll('.cell');
+            console.log('Found cells:', cells.length);
+
+            // Remove all completed classes first
+            cells.forEach(cell => cell.classList.remove('completed'));
+
+            // Check rows
+            for (let row = 0; row < 9; row++) {
+                let isRowComplete = true;
+                const rowNums = new Set();
+
+                for (let col = 0; col < 9; col++) {
+                    const value = userGrid[row][col];
+                    if (value === 0 || rowNums.has(value)) {
+                        isRowComplete = false;
+                        break;
+                    }
+                    rowNums.add(value);
+                }
+
+                if (isRowComplete && rowNums.size === 9) {
+                    // Highlight all cells in this row
+                    for (let col = 0; col < 9; col++) {
+                        const index = row * 9 + col;
+                        cells[index].classList.add('completed');
+                    }
+                }
+            }
+
+            // Check columns
+            for (let col = 0; col < 9; col++) {
+                let isColComplete = true;
+                const colNums = new Set();
+
+                for (let row = 0; row < 9; row++) {
+                    const value = userGrid[row][col];
+                    if (value === 0 || colNums.has(value)) {
+                        isColComplete = false;
+                        break;
+                    }
+                    colNums.add(value);
+                }
+
+                if (isColComplete && colNums.size === 9) {
+                    // Highlight all cells in this column
+                    for (let row = 0; row < 9; row++) {
+                        const index = row * 9 + col;
+                        cells[index].classList.add('completed');
+                    }
+                }
+            }
+
+            // Check 3x3 boxes
+            for (let boxRow = 0; boxRow < 3; boxRow++) {
+                for (let boxCol = 0; boxCol < 3; boxCol++) {
+                    let isBoxComplete = true;
+                    const boxNums = new Set();
+
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            const row = boxRow * 3 + i;
+                            const col = boxCol * 3 + j;
+                            const value = userGrid[row][col];
+
+                            if (value === 0 || boxNums.has(value)) {
+                                isBoxComplete = false;
+                                break;
+                            }
+                            boxNums.add(value);
+                        }
+                        if (!isBoxComplete) break;
+                    }
+
+                    if (isBoxComplete && boxNums.size === 9) {
+                        // Highlight all cells in this 3x3 box
+                        for (let i = 0; i < 3; i++) {
+                            for (let j = 0; j < 3; j++) {
+                                const row = boxRow * 3 + i;
+                                const col = boxCol * 3 + j;
+                                const index = row * 9 + col;
+                                cells[index].classList.add('completed');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function updateNumberPadState() {
+            console.log('updateNumberPadState called, greyOutUsedChars:', greyOutUsedChars);
+
             if (!greyOutUsedChars) {
                 // Remove disabled state from all buttons
                 document.querySelectorAll('.number-btn').forEach(btn => {
                     btn.classList.remove('disabled');
                 });
+                console.log('Grey out disabled, all buttons enabled');
                 return;
             }
 
@@ -770,16 +1062,21 @@
                     const value = userGrid[row][col];
                     if (value !== 0) {
                         const char = NUM_TO_CHAR[value];
-                        charCount[char]++;
+                        if (char) {
+                            charCount[char]++;
+                        }
                     }
                 }
             }
+
+            console.log('Character counts:', charCount);
 
             // Update button states - each character should appear exactly 9 times
             document.querySelectorAll('.number-btn').forEach(btn => {
                 const char = btn.dataset.char;
                 if (charCount[char] >= 9) {
                     btn.classList.add('disabled');
+                    console.log('Disabling button for:', char);
                 } else {
                     btn.classList.remove('disabled');
                 }
