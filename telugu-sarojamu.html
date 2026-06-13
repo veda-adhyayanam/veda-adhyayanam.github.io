@@ -549,15 +549,40 @@
     </div>
 
     <script>
-        // Telugu characters mapping
-        const TELUGU_CHARS = ['గో', 'విం', 'దం', 'భ', 'జ', 'మూ', 'ఢ', 'మ', 'తే'];
-        const CHAR_TO_NUM = {};
-        const NUM_TO_CHAR = {};
+        // Telugu character sets for each phrase
+        const PHRASE_DATA = [
+            {
+                subtitle: "గో విం దం భ జ మూ ఢ మ తే",
+                chars: ['గో', 'విం', 'దం', 'భ', 'జ', 'మూ', 'ఢ', 'మ', 'తే']
+            },
+            {
+                subtitle: "న మో మ హా దే వా య న మః",
+                chars: ['న', 'మో', 'మ', 'హా', 'దే', 'వా', 'య', 'న', 'మః']
+            },
+            {
+                subtitle: "స దా వ త్స లే మా తృ భూ మే",
+                chars: ['స', 'దా', 'వ', 'త్స', 'లే', 'మా', 'తృ', 'భూ', 'మే']
+            }
+        ];
 
-        TELUGU_CHARS.forEach((char, index) => {
-            CHAR_TO_NUM[char] = index + 1;
-            NUM_TO_CHAR[index + 1] = char;
-        });
+        // Select random phrase
+        const selectedPhrase = PHRASE_DATA[Math.floor(Math.random() * PHRASE_DATA.length)];
+
+        // Telugu characters mapping (will be set based on selected phrase)
+        let TELUGU_CHARS = selectedPhrase.chars;
+        let CHAR_TO_NUM = {};
+        let NUM_TO_CHAR = {};
+
+        function initializeCharMappings() {
+            CHAR_TO_NUM = {};
+            NUM_TO_CHAR = {};
+            TELUGU_CHARS.forEach((char, index) => {
+                CHAR_TO_NUM[char] = index + 1;
+                NUM_TO_CHAR[index + 1] = char;
+            });
+        }
+
+        initializeCharMappings();
 
         // Game state
         let currentDifficulty = 'easy';
@@ -572,6 +597,12 @@
 
         // Initialize game
         function init() {
+            // Update subtitle in the page
+            document.querySelector('.subtitle').textContent = selectedPhrase.subtitle;
+
+            // Update page title
+            document.title = `Telugu Sarojamu - ${selectedPhrase.subtitle}`;
+
             createNumberPad();
             setupEventListeners();
             startNewGame();
